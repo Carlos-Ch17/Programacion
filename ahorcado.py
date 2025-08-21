@@ -3,6 +3,7 @@ INTENTOS_FIJOS = 5
 ultimo_modo = None
 ultimo_resultado = None
 ultima_palabra = None
+Mostradas=[]
 
 def mostrar_palabra(palabra, adivinadas):
     resultado = ""
@@ -38,6 +39,7 @@ def un_jugador():
             ultimo_modo = "Un jugador"
             ultimo_resultado = "Ganó"
             ultima_palabra = palabra
+            Mostradas.append(palabra)
             return
     print("¡Perdiste! La palabra era:", palabra)
     ultimo_modo = "Un jugador"
@@ -58,18 +60,21 @@ def contra_computadora():
         abecedario.remove(letra)
         print("\nComputadora: ¿La palabra tiene la letra", letra, "?")
         respuesta = input("Responde (si o no): ")
+        while respuesta != "si" and respuesta != "no":
+                respuesta = input("Responde (si o no): ")
         if respuesta == "si":
-            adivinadas.append(letra)
-            print("Correcto!")
-        else:
-            intentos -= 1
-            print("Incorrecto. Intentos restantes:", intentos)
+              adivinadas.append(letra)
+              print("Correcto!")
+        if respuesta == "no":
+              intentos -= 1
+              print("Incorrecto. Intentos restantes:", intentos)
         print("Palabra:", mostrar_palabra(palabra, adivinadas))
         if "_" not in mostrar_palabra(palabra, adivinadas):
             print("La computadora ganó. La palabra era:", palabra)
             ultimo_modo = "Contra computadora"
             ultimo_resultado = "Computadora ganó"
             ultima_palabra = palabra
+            Mostradas.append(palabra)
             return
     print("La computadora perdió. La palabra era:", palabra)
     ultimo_modo = "Contra computadora"
@@ -104,6 +109,7 @@ def multijugador():
             ultimo_modo = "Multijugador"
             ultimo_resultado = jugador2 + " ganó"
             ultima_palabra = palabra
+            Mostradas.append(palabra)
             return
     print("¡", jugador2, "perdió! La palabra era:", palabra)
     ultimo_modo = "Multijugador"
@@ -119,14 +125,41 @@ def ver_estadisticas():
         print("Resultado:", ultimo_resultado)
         print("Palabra:", ultima_palabra)
 
+def reglas():
+    print("\n===Reglas====")
+    print("1. Leer las ordenes")
+    print("2. disfrutar")
+
 def menu():
     while True:
         print("\n=== JUEGO DEL AHORCADO ===")
+        print("1. Jugar")
+        print("2. Reglas")
+        print("3. estadisticas")
+        print("4. Palabras adivinadas")
+        print("5. Salir")
+        opcion = input("Elige una opción: ")
+        if opcion == "1":
+            submenu()
+        elif opcion == "2":
+            reglas()
+        elif opcion == "3":
+            ver_estadisticas()
+        elif opcion == "4":
+            print("Palabras ya usadas: ", Mostradas)
+        elif opcion == "5":
+            print("Gracias por jugar!")
+            break
+        else:
+            print("Opción inválida.")
+
+def submenu():
+    while True:
+        print("\n===Modos de juego===")
         print("1. Solo jugador")
         print("2. Contra la computadora")
         print("3. Multijugador")
-        print("4. Ver estadísticas")
-        print("5. Salir")
+        print("4. Volver a menu principal")
         opcion = input("Elige una opción: ")
         if opcion == "1":
             un_jugador()
@@ -135,9 +168,6 @@ def menu():
         elif opcion == "3":
             multijugador()
         elif opcion == "4":
-            ver_estadisticas()
-        elif opcion == "5":
-            print("Gracias por jugar!")
             break
         else:
             print("Opción inválida.")
